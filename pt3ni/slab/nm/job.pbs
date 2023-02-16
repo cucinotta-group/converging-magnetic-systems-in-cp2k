@@ -1,0 +1,30 @@
+#!/bin/bash  --login 
+#PBS -N Pt3Ni
+#PBS -l select=1:ncpus=64:mem=128GB
+#PBS -l walltime=00:30:00
+#PBS -j eo
+
+cd $PBS_O_WORKDIR
+echo "<qsub_standard_output>" 
+date 
+echo "<qstat -f $PBS_JOBID>" 
+qstat -f $PBS_JOBID 
+echo "</qstat -f $PBS_JOBID>"
+
+export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR) 
+export OMP_NUM_THREADS=1 
+env 
+echo "</qsub_standard_output>" 
+
+
+echo Initial list of module loaded 
+module load  intel-suite/2017.6   cp2k/6.1-intel-mpi
+module list -l
+
+CASE_IN=cp2k.inp
+CASE_OUT=log.out
+
+mpiexec cp2k.popt -i $CASE_IN -o $CASE_OUT
+
+
+

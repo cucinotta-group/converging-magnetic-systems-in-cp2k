@@ -1,0 +1,1531 @@
+ DBCSR| CPU Multiplication driver                                           XSMM (U)
+ DBCSR| Multrec recursion limit                                              512 (U)
+ DBCSR| Multiplication stack size                                           1000 (D)
+ DBCSR| Maximum elements for images                                    UNLIMITED (U)
+ DBCSR| Multiplicative factor virtual images                                   1 (U)
+ DBCSR| Use multiplication densification                                       T (D)
+ DBCSR| Multiplication size stacks                                             3 (U)
+ DBCSR| Use memory pool for CPU allocation                                     F (U)
+ DBCSR| Number of 3D layers                                               SINGLE (U)
+ DBCSR| Use MPI memory allocation                                              F (U)
+ DBCSR| Use RMA algorithm                                                      F (U)
+ DBCSR| Use Communication thread                                               T (U)
+ DBCSR| Communication thread load                                             87 (D)
+ DBCSR| MPI: My process id                                                     0
+ DBCSR| MPI: Number of processes                                             128
+ DBCSR| OMP: Current number of threads                                         1
+ DBCSR| OMP: Max number of threads                                             1
+ DBCSR| Split modifier for TAS multiplication algorithm                  1.0E+00 (U)
+
+
+  **** **** ******  **  PROGRAM STARTED AT               2023-02-15 10:19:02.718
+ ***** ** ***  *** **   PROGRAM STARTED ON                             nid002527
+ **    ****   ******    PROGRAM STARTED BY                                cahart
+ ***** **    ** ** **   PROGRAM PROCESS ID                                162251
+  **** **  *******  **  PROGRAM STARTED IN /mnt/lustre/a2fs-work2/work/e05/e05/c
+                                           ahart/postdoc/masters/ni/archer2/slab
+                                           /optimise/magnetisation/scf_1e-3_temp
+                                           -2000_mos-1000_alpha-0.08_beta-1.5_pe
+                                           riodic-xyz/search/0.20_0.6
+
+ CP2K| version string:                 CP2K version 2023.1 (Development Version)
+ CP2K| source code revision number:                                  git:964cd58
+ CP2K| cp2kflags: omp libint fftw3 libxc elpa parallel scalapack xsmm plumed2 mk
+ CP2K|            l
+ CP2K| is freely available from                            https://www.cp2k.org/
+ CP2K| Program compiled at                          Mon 13 Feb 17:05:14 GMT 2023
+ CP2K| Program compiled on                                                  ln01
+ CP2K| Program compiled for                                              ARCHER2
+ CP2K| Data directory path    /work/e05/e05/cahart/cp2k/cp2k-2023.1/cp2k-2023.1-
+ CP2K| Input file name                                                  cp2k.inp
+
+ GLOBAL| Force Environment number                                              1
+ GLOBAL| Basis set file name                                        BASIS_MOLOPT
+ GLOBAL| Potential file name                                      GTH_POTENTIALS
+ GLOBAL| MM Potential file name                                     MM_POTENTIAL
+ GLOBAL| Coordinate file name                                      __STD_INPUT__
+ GLOBAL| Method name                                                        CP2K
+ GLOBAL| Project name                                                    Ni_bulk
+ GLOBAL| Run type                                                         ENERGY
+ GLOBAL| FFT library                                                       FFTW3
+ GLOBAL| Diagonalization library                                            ELPA
+ GLOBAL| DGEMM library                                                      BLAS
+ GLOBAL| Minimum number of eigenvectors for ELPA usage                        16
+ GLOBAL| Orthonormality check for eigenvectors                          DISABLED
+ GLOBAL| Matrix multiplication library                                 ScaLAPACK
+ GLOBAL| All-to-all communication in single precision                          F
+ GLOBAL| FFTs using library dependent lengths                                  F
+ GLOBAL| Grid backend                                                       AUTO
+ GLOBAL| Global print level                                               MEDIUM
+ GLOBAL| MPI I/O enabled                                                       T
+ GLOBAL| Total number of message passing processes                           128
+ GLOBAL| Number of threads for this process                                    1
+ GLOBAL| This output is from process                                           0
+ GLOBAL| Stack size for threads created by OpenMP (OMP_STACKSIZE)        default
+ GLOBAL| CPU model name                          AMD EPYC 7742 64-Core Processor
+ GLOBAL| CPUID                                                              1002
+
+ MEMORY| system memory details [Kb]
+ MEMORY|                        rank 0           min           max       average
+ MEMORY| MemTotal            263528084     263528084     263528084     263528084
+ MEMORY| MemFree             238324868     238324868     238324868     238324868
+ MEMORY| Buffers                 25484         25484         25484         25484
+ MEMORY| Cached                 893256        893256        893256        893256
+ MEMORY| Slab                  1659312       1659312       1659312       1659312
+ MEMORY| SReclaimable           103276        103276        103276        103276
+ MEMORY| MemLikelyFree       239346884     239346884     239346884     239346884
+
+
+ *** Fundamental physical constants (SI units) ***
+
+ *** Literature: B. J. Mohr and B. N. Taylor,
+ ***             CODATA recommended values of the fundamental physical
+ ***             constants: 2006, Web Version 5.1
+ ***             http://physics.nist.gov/constants
+
+ Speed of light in vacuum [m/s]                             2.99792458000000E+08
+ Magnetic constant or permeability of vacuum [N/A**2]       1.25663706143592E-06
+ Electric constant or permittivity of vacuum [F/m]          8.85418781762039E-12
+ Planck constant (h) [J*s]                                  6.62606896000000E-34
+ Planck constant (h-bar) [J*s]                              1.05457162825177E-34
+ Elementary charge [C]                                      1.60217648700000E-19
+ Electron mass [kg]                                         9.10938215000000E-31
+ Electron g factor [ ]                                     -2.00231930436220E+00
+ Proton mass [kg]                                           1.67262163700000E-27
+ Fine-structure constant                                    7.29735253760000E-03
+ Rydberg constant [1/m]                                     1.09737315685270E+07
+ Avogadro constant [1/mol]                                  6.02214179000000E+23
+ Boltzmann constant [J/K]                                   1.38065040000000E-23
+ Atomic mass unit [kg]                                      1.66053878200000E-27
+ Bohr radius [m]                                            5.29177208590000E-11
+
+ *** Conversion factors ***
+
+ [u] -> [a.u.]                                              1.82288848426455E+03
+ [Angstrom] -> [Bohr] = [a.u.]                              1.88972613288564E+00
+ [a.u.] = [Bohr] -> [Angstrom]                              5.29177208590000E-01
+ [a.u.] -> [s]                                              2.41888432650478E-17
+ [a.u.] -> [fs]                                             2.41888432650478E-02
+ [a.u.] -> [J]                                              4.35974393937059E-18
+ [a.u.] -> [N]                                              8.23872205491840E-08
+ [a.u.] -> [K]                                              3.15774647902944E+05
+ [a.u.] -> [kJ/mol]                                         2.62549961709828E+03
+ [a.u.] -> [kcal/mol]                                       6.27509468713739E+02
+ [a.u.] -> [Pa]                                             2.94210107994716E+13
+ [a.u.] -> [bar]                                            2.94210107994716E+08
+ [a.u.] -> [atm]                                            2.90362800883016E+08
+ [a.u.] -> [eV]                                             2.72113838565563E+01
+ [a.u.] -> [Hz]                                             6.57968392072181E+15
+ [a.u.] -> [1/cm] (wave numbers)                            2.19474631370540E+05
+ [a.u./Bohr**2] -> [1/cm]                                   5.14048714338585E+03
+ 
+
+ CELL_TOP| Volume [angstrom^3]:                                       983.249569
+ CELL_TOP| Vector a [angstrom     7.012     0.000     0.000   |a| =     7.011596
+ CELL_TOP| Vector b [angstrom     0.000     7.012     0.000   |b| =     7.011596
+ CELL_TOP| Vector c [angstrom     0.000     0.000    20.000   |c| =    20.000000
+ CELL_TOP| Angle (b,c), alpha [degree]:                                90.000000
+ CELL_TOP| Angle (a,c), beta  [degree]:                                90.000000
+ CELL_TOP| Angle (a,b), gamma [degree]:                                90.000000
+ CELL_TOP| Numerically orthorhombic:                                         YES
+ CELL_TOP| Periodicity                                                       XYZ
+
+ GENERATE|  Preliminary Number of Bonds generated:                             0
+ GENERATE|  Achieved consistency in connectivity generation.
+
+ CELL| Volume [angstrom^3]:                                           983.249569
+ CELL| Vector a [angstrom]:       7.012     0.000     0.000   |a| =     7.011596
+ CELL| Vector b [angstrom]:       0.000     7.012     0.000   |b| =     7.011596
+ CELL| Vector c [angstrom]:       0.000     0.000    20.000   |c| =    20.000000
+ CELL| Angle (b,c), alpha [degree]:                                    90.000000
+ CELL| Angle (a,c), beta  [degree]:                                    90.000000
+ CELL| Angle (a,b), gamma [degree]:                                    90.000000
+ CELL| Numerically orthorhombic:                                             YES
+ CELL| Periodicity                                                           XYZ
+
+ CELL_REF| Volume [angstrom^3]:                                       983.249569
+ CELL_REF| Vector a [angstrom     7.012     0.000     0.000   |a| =     7.011596
+ CELL_REF| Vector b [angstrom     0.000     7.012     0.000   |b| =     7.011596
+ CELL_REF| Vector c [angstrom     0.000     0.000    20.000   |c| =    20.000000
+ CELL_REF| Angle (b,c), alpha [degree]:                                90.000000
+ CELL_REF| Angle (a,c), beta  [degree]:                                90.000000
+ CELL_REF| Angle (a,b), gamma [degree]:                                90.000000
+ CELL_REF| Numerically orthorhombic:                                         YES
+ CELL_REF| Periodicity                                                       XYZ
+
+ *** WARNING in cryssym.F:165 :: Symmetry library SPGLIB not available ***
+
+
+ *******************************************************************************
+                                    Kpoints
+ *******************************************************************************
+ BRILLOUIN| K-point scheme                                        Monkhorst-Pack
+ BRILLOUIN| K-Point grid                                             4    4    1
+ BRILLOUIN| Accuracy in Symmetry determination                      0.100000E-05
+ BRILLOUIN| K-Point point group symmetrization                               OFF
+ BRILLOUIN| Wavefunction type                                            COMPLEX
+ BRILLOUIN| List of Kpoints [2 Pi/Bohr]                                        8
+ BRILLOUIN| Number           Weight            X              Y              Z
+ BRILLOUIN|     1           0.12500       -0.37500       -0.37500        0.00000
+ BRILLOUIN|     2           0.12500       -0.37500       -0.12500        0.00000
+ BRILLOUIN|     3           0.12500       -0.37500        0.12500        0.00000
+ BRILLOUIN|     4           0.12500       -0.37500        0.37500        0.00000
+ BRILLOUIN|     5           0.12500       -0.12500       -0.37500        0.00000
+ BRILLOUIN|     6           0.12500       -0.12500       -0.12500        0.00000
+ BRILLOUIN|     7           0.12500       -0.12500        0.12500        0.00000
+ BRILLOUIN|     8           0.12500       -0.12500        0.37500        0.00000
+ *******************************************************************************
+
+ *******************************************************************************
+ *******************************************************************************
+ **                                                                           **
+ **     #####                         ##              ##                      **
+ **    ##   ##            ##          ##              ##                      **
+ **   ##     ##                       ##            ######                    **
+ **   ##     ##  ##   ##  ##   #####  ##  ##   ####   ##    #####    #####    **
+ **   ##     ##  ##   ##  ##  ##      ## ##   ##      ##   ##   ##  ##   ##   **
+ **   ##  ## ##  ##   ##  ##  ##      ####     ###    ##   ######   ######    **
+ **    ##  ###   ##   ##  ##  ##      ## ##      ##   ##   ##       ##        **
+ **     #######   #####   ##   #####  ##  ##  ####    ##    #####   ##        **
+ **           ##                                                    ##        **
+ **                                                                           **
+ **                                                ... make the atoms dance   **
+ **                                                                           **
+ **            Copyright (C) by CP2K developers group (2000-2023)             **
+ **                      J. Chem. Phys. 152, 194103 (2020)                    **
+ **                                                                           **
+ *******************************************************************************
+
+ *** WARNING in qs_environment.F:1456 :: Number of electrons will be ***
+ *** overwritten by NELEC_ALPHA and NELEC_BETA, multiplicity will be ***
+ *** ignored.                                                        ***
+
+ Number of electrons should be                                               576
+ Sum of NELEC_ALPHA and NELEC_BETA is                                    576.000
+
+ *** WARNING in qs_environment.F:1488 :: NELEC_ALPHA is not an integer, ***
+ *** many features will not be supported.                               ***
+
+
+ *** WARNING in qs_environment.F:1500 :: NELEC_BETA is not an integer, ***
+ *** many features will not be supported.                              ***
+
+
+ *** WARNING in qs_environment.F:1532 :: More ADDED_MOs requested for beta ***
+ *** spin than available.                                                  ***
+
+
+ *** WARNING in qs_environment.F:1548 :: More added MOs requested than     ***
+ *** available. The full set of unoccupied MOs will be used. Use           ***
+ *** 'ADDED_MOS -1' to always use all available MOs and to get rid of this ***
+ *** warning.                                                              ***
+
+
+ DFT| Spin unrestricted (spin-polarized) Kohn-Sham calculation               UKS
+ DFT| Multiplicity                                                             1
+ DFT| Number of spin states                                                    2
+ DFT| Charge                                                                   0
+ DFT| Self-interaction correction (SIC)                                       NO
+ DFT| Cutoffs: density                                              1.000000E-10
+ DFT|          gradient                                             1.000000E-10
+ DFT|          tau                                                  1.000000E-10
+ DFT|          cutoff_smoothing_range                               0.000000E+00
+ DFT| XC density smoothing                                                  NONE
+ DFT| XC derivatives                                                          PW
+
+ FUNCTIONAL| PBE:
+ FUNCTIONAL| J.P.Perdew, K.Burke, M.Ernzerhof, Phys. Rev. Letter, vol. 77, n 18,
+ FUNCTIONAL|  pp. 3865-3868, (1996){spin polarized}                             
+
+ vdW POTENTIAL|                                                   Pair Potential
+ vdW POTENTIAL|          DFT-D3 (Version 3.1)
+ vdW POTENTIAL|          Potential Form: S. Grimme et al, JCP 132: 154104 (2010)
+ vdW POTENTIAL|          Zero Damping
+ vdW POTENTIAL|          Cutoff Radius [Bohr]:                             20.00
+ vdW POTENTIAL|          s6 Scaling Factor:                               1.0000
+ vdW POTENTIAL|          sr6 Scaling Factor:                              1.2170
+ vdW POTENTIAL|          s8 Scaling Factor:                               0.7220
+ vdW POTENTIAL|          Cutoff for CN calculation:                   0.1000E-05
+
+ QS| Method:                                                                 GPW
+ QS| Density plane wave grid type                        NON-SPHERICAL FULLSPACE
+ QS| Number of grid levels:                                                    5
+ QS| Density cutoff [a.u.]:                                                300.0
+ QS| Multi grid cutoff [a.u.]: 1) grid level                               300.0
+ QS|                           2) grid level                               100.0
+ QS|                           3) grid level                                33.3
+ QS|                           4) grid level                                11.1
+ QS|                           5) grid level                                 3.7
+ QS| Grid level progression factor:                                          3.0
+ QS| Relative density cutoff [a.u.]:                                        30.0
+ QS| Interaction thresholds: eps_pgf_orb:                                1.0E-06
+ QS|                         eps_filter_matrix:                          0.0E+00
+ QS|                         eps_core_charge:                            1.0E-14
+ QS|                         eps_rho_gspace:                             1.0E-12
+ QS|                         eps_rho_rspace:                             1.0E-12
+ QS|                         eps_gvg_rspace:                             1.0E-06
+ QS|                         eps_ppl:                                    1.0E-02
+ QS|                         eps_ppnl:                                   1.0E-08
+
+
+ ATOMIC KIND INFORMATION
+
+  1. Atomic kind: Ni_i                                  Number of atoms:      16
+
+     Orbital Basis Set                                        DZVP-MOLOPT-SR-GTH
+
+       Number of orbital shell sets:                                           1
+       Number of orbital shells:                                               8
+       Number of primitive Cartesian functions:                                6
+       Number of Cartesian basis functions:                                   31
+       Number of spherical basis functions:                                   26
+       Norm type:                                                              2
+
+       Normalised Cartesian orbitals:
+
+                        Set   Shell   Orbital            Exponent    Coefficient
+
+                          1       1    2s               10.077428      -0.684558
+                                                         5.847736      -0.844524
+                                                         2.494033       1.088856
+                                                         0.988355       0.395503
+                                                         0.344978       0.010224
+                                                         0.099466      -0.003250
+
+                          1       2    3s               10.077428       0.096747
+                                                         5.847736       0.162504
+                                                         2.494033      -0.297192
+                                                         0.988355      -0.319752
+                                                         0.344978       0.088318
+                                                         0.099466       0.118587
+
+                          1       3    4s               10.077428       0.036437
+                                                         5.847736      -0.381480
+                                                         2.494033       0.003759
+                                                         0.988355      -1.048256
+                                                         0.344978       0.855825
+                                                         0.099466      -0.176350
+
+                          1       4    3px              10.077428      -3.133913
+                                                         5.847736       3.027656
+                                                         2.494033       2.353227
+                                                         0.988355       0.554184
+                                                         0.344978       0.019462
+                                                         0.099466      -0.000291
+                          1       4    3py              10.077428      -3.133913
+                                                         5.847736       3.027656
+                                                         2.494033       2.353227
+                                                         0.988355       0.554184
+                                                         0.344978       0.019462
+                                                         0.099466      -0.000291
+                          1       4    3pz              10.077428      -3.133913
+                                                         5.847736       3.027656
+                                                         2.494033       2.353227
+                                                         0.988355       0.554184
+                                                         0.344978       0.019462
+                                                         0.099466      -0.000291
+
+                          1       5    4px              10.077428      -0.112729
+                                                         5.847736      -0.114008
+                                                         2.494033      -0.347303
+                                                         0.988355      -0.110323
+                                                         0.344978       0.154096
+                                                         0.099466       0.058386
+                          1       5    4py              10.077428      -0.112729
+                                                         5.847736      -0.114008
+                                                         2.494033      -0.347303
+                                                         0.988355      -0.110323
+                                                         0.344978       0.154096
+                                                         0.099466       0.058386
+                          1       5    4pz              10.077428      -0.112729
+                                                         5.847736      -0.114008
+                                                         2.494033      -0.347303
+                                                         0.988355      -0.110323
+                                                         0.344978       0.154096
+                                                         0.099466       0.058386
+
+                          1       6    4dx2             10.077428       8.232726
+                                                         5.847736       9.105758
+                                                         2.494033       2.849835
+                                                         0.988355       0.554319
+                                                         0.344978       0.067245
+                                                         0.099466       0.001940
+                          1       6    4dxy             10.077428      14.259500
+                                                         5.847736      15.771636
+                                                         2.494033       4.936060
+                                                         0.988355       0.960109
+                                                         0.344978       0.116472
+                                                         0.099466       0.003360
+                          1       6    4dxz             10.077428      14.259500
+                                                         5.847736      15.771636
+                                                         2.494033       4.936060
+                                                         0.988355       0.960109
+                                                         0.344978       0.116472
+                                                         0.099466       0.003360
+                          1       6    4dy2             10.077428       8.232726
+                                                         5.847736       9.105758
+                                                         2.494033       2.849835
+                                                         0.988355       0.554319
+                                                         0.344978       0.067245
+                                                         0.099466       0.001940
+                          1       6    4dyz             10.077428      14.259500
+                                                         5.847736      15.771636
+                                                         2.494033       4.936060
+                                                         0.988355       0.960109
+                                                         0.344978       0.116472
+                                                         0.099466       0.003360
+                          1       6    4dz2             10.077428       8.232726
+                                                         5.847736       9.105758
+                                                         2.494033       2.849835
+                                                         0.988355       0.554319
+                                                         0.344978       0.067245
+                                                         0.099466       0.001940
+
+                          1       7    5dx2             10.077428      -2.715373
+                                                         5.847736      -4.020640
+                                                         2.494033      -1.397569
+                                                         0.988355      -0.076143
+                                                         0.344978       0.033435
+                                                         0.099466       0.026032
+                          1       7    5dxy             10.077428      -4.703164
+                                                         5.847736      -6.963952
+                                                         2.494033      -2.420661
+                                                         0.988355      -0.131883
+                                                         0.344978       0.057911
+                                                         0.099466       0.045088
+                          1       7    5dxz             10.077428      -4.703164
+                                                         5.847736      -6.963952
+                                                         2.494033      -2.420661
+                                                         0.988355      -0.131883
+                                                         0.344978       0.057911
+                                                         0.099466       0.045088
+                          1       7    5dy2             10.077428      -2.715373
+                                                         5.847736      -4.020640
+                                                         2.494033      -1.397569
+                                                         0.988355      -0.076143
+                                                         0.344978       0.033435
+                                                         0.099466       0.026032
+                          1       7    5dyz             10.077428      -4.703164
+                                                         5.847736      -6.963952
+                                                         2.494033      -2.420661
+                                                         0.988355      -0.131883
+                                                         0.344978       0.057911
+                                                         0.099466       0.045088
+                          1       7    5dz2             10.077428      -2.715373
+                                                         5.847736      -4.020640
+                                                         2.494033      -1.397569
+                                                         0.988355      -0.076143
+                                                         0.344978       0.033435
+                                                         0.099466       0.026032
+
+                          1       8    5fx3             10.077428      -0.467694
+                                                         5.847736       0.618100
+                                                         2.494033       0.066069
+                                                         0.988355       0.262898
+                                                         0.344978       0.004720
+                                                         0.099466       0.007748
+                          1       8    5fx2y            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fx2z            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fxy2            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fxyz            10.077428      -1.811371
+                                                         5.847736       2.393892
+                                                         2.494033       0.255883
+                                                         0.988355       1.018201
+                                                         0.344978       0.018282
+                                                         0.099466       0.030008
+                          1       8    5fxz2            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fy3             10.077428      -0.467694
+                                                         5.847736       0.618100
+                                                         2.494033       0.066069
+                                                         0.988355       0.262898
+                                                         0.344978       0.004720
+                                                         0.099466       0.007748
+                          1       8    5fy2z            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fyz2            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fz3             10.077428      -0.467694
+                                                         5.847736       0.618100
+                                                         2.494033       0.066069
+                                                         0.988355       0.262898
+                                                         0.344978       0.004720
+                                                         0.099466       0.007748
+
+       Atomic covalent radius [Angstrom]:                                  1.150
+
+       Atomic van der Waals radius [Angstrom]:                             1.630
+
+     GTH Potential information for                                   GTH-PBE-q18
+
+       Description:                       Goedecker-Teter-Hutter pseudopotential
+                                           Goedecker et al., PRB 54, 1703 (1996)
+                                          Hartwigsen et al., PRB 58, 3641 (1998)
+                                                      Krack, TCA 114, 145 (2005)
+
+       Gaussian exponent of the core charge distribution:               4.081633
+       Electronic configuration (s p d ...):                           4   6   8
+
+       Parameters of the local part of the GTH pseudopotential:
+
+                          rloc        C1          C2          C3          C4
+                        0.350000    2.102166    0.648484
+
+       Parameters of the non-local part of the GTH pseudopotential:
+
+                   l      r(l)      h(i,j,l)
+
+                   0    0.261295    0.622658    9.970227
+                                    9.970227  -12.871507
+                   1    0.224253  -11.142708   12.429566
+                                   12.429566  -14.706861
+                   2    0.215348  -12.628146
+
+  2. Atomic kind: Ni_b                                  Number of atoms:      16
+
+     Orbital Basis Set                                        DZVP-MOLOPT-SR-GTH
+
+       Number of orbital shell sets:                                           1
+       Number of orbital shells:                                               8
+       Number of primitive Cartesian functions:                                6
+       Number of Cartesian basis functions:                                   31
+       Number of spherical basis functions:                                   26
+       Norm type:                                                              2
+
+       Normalised Cartesian orbitals:
+
+                        Set   Shell   Orbital            Exponent    Coefficient
+
+                          1       1    2s               10.077428      -0.684558
+                                                         5.847736      -0.844524
+                                                         2.494033       1.088856
+                                                         0.988355       0.395503
+                                                         0.344978       0.010224
+                                                         0.099466      -0.003250
+
+                          1       2    3s               10.077428       0.096747
+                                                         5.847736       0.162504
+                                                         2.494033      -0.297192
+                                                         0.988355      -0.319752
+                                                         0.344978       0.088318
+                                                         0.099466       0.118587
+
+                          1       3    4s               10.077428       0.036437
+                                                         5.847736      -0.381480
+                                                         2.494033       0.003759
+                                                         0.988355      -1.048256
+                                                         0.344978       0.855825
+                                                         0.099466      -0.176350
+
+                          1       4    3px              10.077428      -3.133913
+                                                         5.847736       3.027656
+                                                         2.494033       2.353227
+                                                         0.988355       0.554184
+                                                         0.344978       0.019462
+                                                         0.099466      -0.000291
+                          1       4    3py              10.077428      -3.133913
+                                                         5.847736       3.027656
+                                                         2.494033       2.353227
+                                                         0.988355       0.554184
+                                                         0.344978       0.019462
+                                                         0.099466      -0.000291
+                          1       4    3pz              10.077428      -3.133913
+                                                         5.847736       3.027656
+                                                         2.494033       2.353227
+                                                         0.988355       0.554184
+                                                         0.344978       0.019462
+                                                         0.099466      -0.000291
+
+                          1       5    4px              10.077428      -0.112729
+                                                         5.847736      -0.114008
+                                                         2.494033      -0.347303
+                                                         0.988355      -0.110323
+                                                         0.344978       0.154096
+                                                         0.099466       0.058386
+                          1       5    4py              10.077428      -0.112729
+                                                         5.847736      -0.114008
+                                                         2.494033      -0.347303
+                                                         0.988355      -0.110323
+                                                         0.344978       0.154096
+                                                         0.099466       0.058386
+                          1       5    4pz              10.077428      -0.112729
+                                                         5.847736      -0.114008
+                                                         2.494033      -0.347303
+                                                         0.988355      -0.110323
+                                                         0.344978       0.154096
+                                                         0.099466       0.058386
+
+                          1       6    4dx2             10.077428       8.232726
+                                                         5.847736       9.105758
+                                                         2.494033       2.849835
+                                                         0.988355       0.554319
+                                                         0.344978       0.067245
+                                                         0.099466       0.001940
+                          1       6    4dxy             10.077428      14.259500
+                                                         5.847736      15.771636
+                                                         2.494033       4.936060
+                                                         0.988355       0.960109
+                                                         0.344978       0.116472
+                                                         0.099466       0.003360
+                          1       6    4dxz             10.077428      14.259500
+                                                         5.847736      15.771636
+                                                         2.494033       4.936060
+                                                         0.988355       0.960109
+                                                         0.344978       0.116472
+                                                         0.099466       0.003360
+                          1       6    4dy2             10.077428       8.232726
+                                                         5.847736       9.105758
+                                                         2.494033       2.849835
+                                                         0.988355       0.554319
+                                                         0.344978       0.067245
+                                                         0.099466       0.001940
+                          1       6    4dyz             10.077428      14.259500
+                                                         5.847736      15.771636
+                                                         2.494033       4.936060
+                                                         0.988355       0.960109
+                                                         0.344978       0.116472
+                                                         0.099466       0.003360
+                          1       6    4dz2             10.077428       8.232726
+                                                         5.847736       9.105758
+                                                         2.494033       2.849835
+                                                         0.988355       0.554319
+                                                         0.344978       0.067245
+                                                         0.099466       0.001940
+
+                          1       7    5dx2             10.077428      -2.715373
+                                                         5.847736      -4.020640
+                                                         2.494033      -1.397569
+                                                         0.988355      -0.076143
+                                                         0.344978       0.033435
+                                                         0.099466       0.026032
+                          1       7    5dxy             10.077428      -4.703164
+                                                         5.847736      -6.963952
+                                                         2.494033      -2.420661
+                                                         0.988355      -0.131883
+                                                         0.344978       0.057911
+                                                         0.099466       0.045088
+                          1       7    5dxz             10.077428      -4.703164
+                                                         5.847736      -6.963952
+                                                         2.494033      -2.420661
+                                                         0.988355      -0.131883
+                                                         0.344978       0.057911
+                                                         0.099466       0.045088
+                          1       7    5dy2             10.077428      -2.715373
+                                                         5.847736      -4.020640
+                                                         2.494033      -1.397569
+                                                         0.988355      -0.076143
+                                                         0.344978       0.033435
+                                                         0.099466       0.026032
+                          1       7    5dyz             10.077428      -4.703164
+                                                         5.847736      -6.963952
+                                                         2.494033      -2.420661
+                                                         0.988355      -0.131883
+                                                         0.344978       0.057911
+                                                         0.099466       0.045088
+                          1       7    5dz2             10.077428      -2.715373
+                                                         5.847736      -4.020640
+                                                         2.494033      -1.397569
+                                                         0.988355      -0.076143
+                                                         0.344978       0.033435
+                                                         0.099466       0.026032
+
+                          1       8    5fx3             10.077428      -0.467694
+                                                         5.847736       0.618100
+                                                         2.494033       0.066069
+                                                         0.988355       0.262898
+                                                         0.344978       0.004720
+                                                         0.099466       0.007748
+                          1       8    5fx2y            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fx2z            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fxy2            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fxyz            10.077428      -1.811371
+                                                         5.847736       2.393892
+                                                         2.494033       0.255883
+                                                         0.988355       1.018201
+                                                         0.344978       0.018282
+                                                         0.099466       0.030008
+                          1       8    5fxz2            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fy3             10.077428      -0.467694
+                                                         5.847736       0.618100
+                                                         2.494033       0.066069
+                                                         0.988355       0.262898
+                                                         0.344978       0.004720
+                                                         0.099466       0.007748
+                          1       8    5fy2z            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fyz2            10.077428      -1.045795
+                                                         5.847736       1.382114
+                                                         2.494033       0.147734
+                                                         0.988355       0.587859
+                                                         0.344978       0.010555
+                                                         0.099466       0.017325
+                          1       8    5fz3             10.077428      -0.467694
+                                                         5.847736       0.618100
+                                                         2.494033       0.066069
+                                                         0.988355       0.262898
+                                                         0.344978       0.004720
+                                                         0.099466       0.007748
+
+       Atomic covalent radius [Angstrom]:                                  1.150
+
+       Atomic van der Waals radius [Angstrom]:                             1.630
+
+     GTH Potential information for                                   GTH-PBE-q18
+
+       Description:                       Goedecker-Teter-Hutter pseudopotential
+                                           Goedecker et al., PRB 54, 1703 (1996)
+                                          Hartwigsen et al., PRB 58, 3641 (1998)
+                                                      Krack, TCA 114, 145 (2005)
+
+       Gaussian exponent of the core charge distribution:               4.081633
+       Electronic configuration (s p d ...):                           4   6   8
+
+       Parameters of the local part of the GTH pseudopotential:
+
+                          rloc        C1          C2          C3          C4
+                        0.350000    2.102166    0.648484
+
+       Parameters of the non-local part of the GTH pseudopotential:
+
+                   l      r(l)      h(i,j,l)
+
+                   0    0.261295    0.622658    9.970227
+                                    9.970227  -12.871507
+                   1    0.224253  -11.142708   12.429566
+                                   12.429566  -14.706861
+                   2    0.215348  -12.628146
+
+
+ MOLECULE KIND INFORMATION
+
+
+ All atoms are their own molecule, skipping detailed information
+
+
+ TOTAL NUMBERS AND MAXIMUM NUMBERS
+
+  Total number of            - Atomic kinds:                                   2
+                             - Atoms:                                         32
+                             - Shell sets:                                    32
+                             - Shells:                                       256
+                             - Primitive Cartesian functions:                192
+                             - Cartesian basis functions:                    992
+                             - Spherical basis functions:                    832
+
+  Maximum angular momentum of- Orbital basis functions:                        3
+                             - Local part of the GTH pseudopotential:          2
+                             - Non-local part of the GTH pseudopotential:      3
+
+
+ MODULE QUICKSTEP: ATOMIC COORDINATES IN ANGSTROM
+
+   Atom Kind Element         X             Y             Z       Z(eff)     Mass
+      1    1 Ni   28      0.876298      0.876298      7.370500  18.0000  58.6934
+      2    1 Ni   28      0.876298      4.382298      7.370500  18.0000  58.6934
+      3    1 Ni   28      2.629298      2.629298      7.370500  18.0000  58.6934
+      4    1 Ni   28      2.629298      6.135298      7.370500  18.0000  58.6934
+      5    1 Ni   28      4.382298      0.876298      7.370500  18.0000  58.6934
+      6    1 Ni   28      4.382298      4.382298      7.370500  18.0000  58.6934
+      7    1 Ni   28      6.135298      2.629298      7.370500  18.0000  58.6934
+      8    1 Ni   28      6.135298      6.135298      7.370500  18.0000  58.6934
+      9    2 Ni   28      0.876298      2.629298      9.123500  18.0000  58.6934
+     10    2 Ni   28      0.876298      6.135298      9.123500  18.0000  58.6934
+     11    2 Ni   28      2.629298      0.876298      9.123500  18.0000  58.6934
+     12    2 Ni   28      2.629298      4.382298      9.123500  18.0000  58.6934
+     13    2 Ni   28      4.382298      2.629298      9.123500  18.0000  58.6934
+     14    2 Ni   28      4.382298      6.135298      9.123500  18.0000  58.6934
+     15    2 Ni   28      6.135298      0.876298      9.123500  18.0000  58.6934
+     16    2 Ni   28      6.135298      4.382298      9.123500  18.0000  58.6934
+     17    2 Ni   28      0.876298      0.876298     10.876500  18.0000  58.6934
+     18    2 Ni   28      0.876298      4.382298     10.876500  18.0000  58.6934
+     19    2 Ni   28      2.629298      2.629298     10.876500  18.0000  58.6934
+     20    2 Ni   28      2.629298      6.135298     10.876500  18.0000  58.6934
+     21    2 Ni   28      4.382298      0.876298     10.876500  18.0000  58.6934
+     22    2 Ni   28      4.382298      4.382298     10.876500  18.0000  58.6934
+     23    2 Ni   28      6.135298      2.629298     10.876500  18.0000  58.6934
+     24    2 Ni   28      6.135298      6.135298     10.876500  18.0000  58.6934
+     25    1 Ni   28      0.876298      2.629298     12.629500  18.0000  58.6934
+     26    1 Ni   28      0.876298      6.135298     12.629500  18.0000  58.6934
+     27    1 Ni   28      2.629298      0.876298     12.629500  18.0000  58.6934
+     28    1 Ni   28      2.629298      4.382298     12.629500  18.0000  58.6934
+     29    1 Ni   28      4.382298      2.629298     12.629500  18.0000  58.6934
+     30    1 Ni   28      4.382298      6.135298     12.629500  18.0000  58.6934
+     31    1 Ni   28      6.135298      0.876298     12.629500  18.0000  58.6934
+     32    1 Ni   28      6.135298      4.382298     12.629500  18.0000  58.6934
+
+
+
+ SCF PARAMETERS         Density guess:                                    ATOMIC
+                        --------------------------------------------------------
+                        max_scf:                                             500
+                        max_scf_history:                                       0
+                        max_diis:                                              4
+                        --------------------------------------------------------
+                        eps_scf:                                        1.00E-03
+                        eps_scf_history:                                0.00E+00
+                        eps_diis:                                       1.00E-01
+                        eps_eigval:                                     1.00E-05
+                        --------------------------------------------------------
+                        level_shift [a.u.]:                             0.000000
+                        added MOs                                       537  550
+                        --------------------------------------------------------
+                        Mixing method:                            BROYDEN_MIXING
+                                                charge density mixing in g-space
+                        --------------------------------------------------------
+                        Smear method:                                FERMI_DIRAC
+                        Electronic temperature [K]:                       2000.0
+                        Electronic temperature [a.u.]:                  6.33E-03
+                        Accuracy threshold:                             1.00E-10
+                        --------------------------------------------------------
+                        No outer SCF
+
+ PW_GRID| Information for grid number                                          1
+ PW_GRID| Grid distributed over                                   128 processors
+ PW_GRID| Real space group dimensions                                     8   16
+ PW_GRID| the grid is blocked:                                               YES
+ PW_GRID| Cutoff [a.u.]                                                    300.0
+ PW_GRID| spherical cutoff:                                                   NO
+ PW_GRID|   Bounds   1            -54      53                Points:         108
+ PW_GRID|   Bounds   2            -54      53                Points:         108
+ PW_GRID|   Bounds   3           -150     149                Points:         300
+ PW_GRID| Volume element (a.u.^3)  0.1896E-02     Volume (a.u.^3)      6635.2971
+ PW_GRID| Grid span                                                    FULLSPACE
+ PW_GRID|   Distribution                         Average         Max         Min
+ PW_GRID|   G-Vectors                            27337.5       28728       25272
+ PW_GRID|   G-Rays                                 253.1         266         234
+ PW_GRID|   Real Space Points                    27337.5       28728       25272
+
+ PW_GRID| Information for grid number                                          2
+ PW_GRID| Number of the reference grid                                         1
+ PW_GRID| Grid distributed over                                   128 processors
+ PW_GRID| Real space group dimensions                                     8   16
+ PW_GRID| the grid is blocked:                                                NO
+ PW_GRID| Cutoff [a.u.]                                                    100.0
+ PW_GRID| spherical cutoff:                                                   NO
+ PW_GRID|   Bounds   1            -30      29                Points:          60
+ PW_GRID|   Bounds   2            -30      29                Points:          60
+ PW_GRID|   Bounds   3            -90      89                Points:         180
+ PW_GRID| Volume element (a.u.^3)  0.1024E-01     Volume (a.u.^3)      6635.2971
+ PW_GRID| Grid span                                                    FULLSPACE
+ PW_GRID|   Distribution                         Average         Max         Min
+ PW_GRID|   G-Vectors                             5062.5       15960           0
+ PW_GRID|   G-Rays                                  84.4         266           0
+ PW_GRID|   Real Space Points                     5062.5        5760        3780
+
+ PW_GRID| Information for grid number                                          3
+ PW_GRID| Number of the reference grid                                         1
+ PW_GRID| Grid distributed over                                   128 processors
+ PW_GRID| Real space group dimensions                                     8   16
+ PW_GRID| the grid is blocked:                                                NO
+ PW_GRID| Cutoff [a.u.]                                                     33.3
+ PW_GRID| spherical cutoff:                                                   NO
+ PW_GRID|   Bounds   1            -18      17                Points:          36
+ PW_GRID|   Bounds   2            -18      17                Points:          36
+ PW_GRID|   Bounds   3            -50      49                Points:         100
+ PW_GRID| Volume element (a.u.^3)  0.5120E-01     Volume (a.u.^3)      6635.2971
+ PW_GRID| Grid span                                                    FULLSPACE
+ PW_GRID|   Distribution                         Average         Max         Min
+ PW_GRID|   G-Vectors                             1012.5        9576           0
+ PW_GRID|   G-Rays                                  28.1         266           0
+ PW_GRID|   Real Space Points                     1012.5        1500         800
+
+ PW_GRID| Information for grid number                                          4
+ PW_GRID| Number of the reference grid                                         1
+ PW_GRID| Grid distributed over                                   128 processors
+ PW_GRID| Real space group dimensions                                     8   16
+ PW_GRID| the grid is blocked:                                                NO
+ PW_GRID| Cutoff [a.u.]                                                     11.1
+ PW_GRID| spherical cutoff:                                                   NO
+ PW_GRID|   Bounds   1            -10       9                Points:          20
+ PW_GRID|   Bounds   2            -10       9                Points:          20
+ PW_GRID|   Bounds   3            -30      29                Points:          60
+ PW_GRID| Volume element (a.u.^3)  0.2765         Volume (a.u.^3)      6635.2971
+ PW_GRID| Grid span                                                    FULLSPACE
+ PW_GRID|   Distribution                         Average         Max         Min
+ PW_GRID|   G-Vectors                              187.5        3800           0
+ PW_GRID|   G-Rays                                   9.4         190           0
+ PW_GRID|   Real Space Points                      187.5         360         120
+
+ PW_GRID| Information for grid number                                          5
+ PW_GRID| Number of the reference grid                                         1
+ PW_GRID| Grid distributed over                                   128 processors
+ PW_GRID| Real space group dimensions                                     8   16
+ PW_GRID| the grid is blocked:                                                NO
+ PW_GRID| Cutoff [a.u.]                                                      3.7
+ PW_GRID| spherical cutoff:                                                   NO
+ PW_GRID|   Bounds   1             -6       5                Points:          12
+ PW_GRID|   Bounds   2             -6       5                Points:          12
+ PW_GRID|   Bounds   3            -18      17                Points:          36
+ PW_GRID| Volume element (a.u.^3)   1.280         Volume (a.u.^3)      6635.2971
+ PW_GRID| Grid span                                                    FULLSPACE
+ PW_GRID|   Distribution                         Average         Max         Min
+ PW_GRID|   G-Vectors                               40.5        1296           0
+ PW_GRID|   G-Rays                                   3.4         108           0
+ PW_GRID|   Real Space Points                       40.5          72           0
+
+ POISSON| Solver                                                        PERIODIC
+ POISSON| Periodicity                                                        XYZ
+
+ RS_GRID| Information for grid number                                          1
+ RS_GRID|   Bounds   1            -54      53                Points:         108
+ RS_GRID|   Bounds   2            -54      53                Points:         108
+ RS_GRID|   Bounds   3           -150     149                Points:         300
+ RS_GRID| Real space distribution over                                  8 groups
+ RS_GRID| Real space distribution along direction                              2
+ RS_GRID| Border size                                                         28
+ RS_GRID| Real space distribution over                                 16 groups
+ RS_GRID| Real space distribution along direction                              3
+ RS_GRID| Border size                                                         28
+ RS_GRID|   Distribution                         Average         Max         Min
+ RS_GRID|   Planes                                  69.5          70          69
+ RS_GRID|   Distribution                         Average         Max         Min
+ RS_GRID|   Planes                                  74.8          75          74
+
+ RS_GRID| Information for grid number                                          2
+ RS_GRID|   Bounds   1            -30      29                Points:          60
+ RS_GRID|   Bounds   2            -30      29                Points:          60
+ RS_GRID|   Bounds   3            -90      89                Points:         180
+ RS_GRID| Real space fully replicated
+ RS_GRID| Group size                                                           1
+
+ RS_GRID| Information for grid number                                          3
+ RS_GRID|   Bounds   1            -18      17                Points:          36
+ RS_GRID|   Bounds   2            -18      17                Points:          36
+ RS_GRID|   Bounds   3            -50      49                Points:         100
+ RS_GRID| Real space fully replicated
+ RS_GRID| Group size                                                           1
+
+ RS_GRID| Information for grid number                                          4
+ RS_GRID|   Bounds   1            -10       9                Points:          20
+ RS_GRID|   Bounds   2            -10       9                Points:          20
+ RS_GRID|   Bounds   3            -30      29                Points:          60
+ RS_GRID| Real space fully replicated
+ RS_GRID| Group size                                                           1
+
+ RS_GRID| Information for grid number                                          5
+ RS_GRID|   Bounds   1             -6       5                Points:          12
+ RS_GRID|   Bounds   2             -6       5                Points:          12
+ RS_GRID|   Bounds   3            -18      17                Points:          36
+ RS_GRID| Real space fully replicated
+ RS_GRID| Group size                                                           1
+
+ Spin 1
+
+ Number of electrons:                                                        294.400
+ Number of occupied orbitals:                                                295
+ Number of molecular orbitals:                                               832
+
+ Spin 2
+
+ Number of electrons:                                                        281.600
+ Number of occupied orbitals:                                                282
+ Number of molecular orbitals:                                               832
+
+ Number of orbital functions:                                                832
+ Number of independent orbital functions:                                    832
+
+ Extrapolation method: initial_guess
+
+ Atomic guess: The first density matrix is obtained in terms of atomic orbitals
+               and electronic configurations assigned to each atomic kind
+
+ Guess for atomic kind: Ni_i
+
+ Electronic structure
+    Total number of core electrons                                         10.00
+    Total number of valence electrons                                      18.00
+    Total number of electrons                                              28.00
+    Multiplicity                                                         doublet
+    Alpha Electrons
+    S   [  1.00  1.00] 1.00  1.00
+    P   [  3.00] 3.00
+    D      4.30
+    Beta Electrons
+    S   [  1.00  1.00] 1.00  1.00
+    P   [  3.00] 3.00
+    D      3.70
+
+
+ *******************************************************************************
+                  Iteration          Convergence                     Energy [au]
+ *******************************************************************************
+                          1         1.51708                    -167.066118163909
+                          2         15.1863                    -156.630620063797
+                          3         2.29518                    -168.318250074867
+                          4        0.198051                    -168.608832938310
+                          5        0.762142E-01                -168.611735578094
+                          6        0.143308E-01                -168.612261389358
+                          7        0.453828E-02                -168.612313512258
+                          8        0.436836E-02                -168.612313369107
+                          9        0.696306E-03                -168.612315351147
+                         10        0.226261E-02                -168.612315025774
+                         11        0.995757E-03                -168.612315268998
+                         12        0.170432E-03                -168.612315393602
+                         13        0.195344E-03                -168.612315392852
+                         14        0.147467E-03                -168.612315396817
+                         15        0.185080E-03                -168.612315392680
+                         16        0.969041E-04                -168.612315398729
+                         17        0.991109E-04                -168.612315398505
+                         18        0.433236E-04                -168.612315399326
+                         19        0.269198E-04                -168.612315399408
+                         20        0.109432E-04                -168.612315399455
+                         21        0.443439E-05                -168.612315399480
+                         22        0.816741E-05                -168.612315399471
+                         23        0.470984E-05                -168.612315399481
+                         24        0.245833E-05                -168.612315399483
+                         25        0.100766E-05                -168.612315399484
+                         26        0.417991E-06                -168.612315399483
+
+ Energy components [Hartree]           Total Energy ::         -168.612315399483
+                                        Band Energy ::          -26.569179124340
+                                     Kinetic Energy ::           97.305065650248
+                                   Potential Energy ::         -265.917381049731
+                                      Virial (-V/T) ::            2.732821557364
+                                        Core Energy ::         -299.567011526383
+                                          XC Energy ::          -16.225783039068
+                                     Coulomb Energy ::          147.180479165968
+                       Total Pseudopotential Energy ::         -396.958417944166
+                       Local Pseudopotential Energy ::         -362.646534962999
+                    Nonlocal Pseudopotential Energy ::          -34.311882981167
+                                        Confinement ::            0.863407675347
+
+ Orbital energies  State     Spin  L     Occupation   Energy[a.u.]    Energy[eV]
+
+                       1    alpha  0          1.000      -4.170511   -113.485387
+                       2    alpha  0          1.000      -0.181081     -4.927469
+                       1     beta  0          1.000      -4.143060   -112.738394
+                       2     beta  0          1.000      -0.176746     -4.809500
+
+                       1    alpha  1          3.000      -2.576642    -70.114003
+                       1     beta  1          3.000      -2.549934    -69.387228
+
+                       1    alpha  2          4.300      -0.325251     -8.850518
+                       1     beta  2          3.700      -0.302561     -8.233099
+
+
+ Total Electron Density at R=0:                                         0.030426
+
+ Guess for atomic kind: Ni_b
+
+ Electronic structure
+    Total number of core electrons                                         10.00
+    Total number of valence electrons                                      18.00
+    Total number of electrons                                              28.00
+    Multiplicity                                                         singlet
+    Alpha Electrons
+    S   [  1.00  1.00] 1.00  1.00
+    P   [  3.00] 3.00
+    D      4.10
+    Beta Electrons
+    S   [  1.00  1.00] 1.00  1.00
+    P   [  3.00] 3.00
+    D      3.90
+
+
+ *******************************************************************************
+                  Iteration          Convergence                     Energy [au]
+ *******************************************************************************
+                          1         1.51622                    -167.062902623250
+                          2         14.3647                    -156.600964914294
+                          3         2.13599                    -168.315510661515
+                          4        0.161821                    -168.606195552173
+                          5        0.540283E-01                -168.608936883840
+                          6        0.618436E-02                -168.609283940039
+                          7        0.333525E-02                -168.609288609862
+                          8        0.305386E-02                -168.609289088693
+                          9        0.840678E-03                -168.609289939875
+                         10        0.706330E-03                -168.609289993610
+                         11        0.465363E-03                -168.609289993444
+                         12        0.702866E-03                -168.609289995570
+                         13        0.368287E-03                -168.609290023428
+                         14        0.299337E-03                -168.609290030882
+                         15        0.194511E-03                -168.609290035608
+                         16        0.193402E-03                -168.609290040275
+                         17        0.335008E-03                -168.609290034893
+                         18        0.213044E-03                -168.609290039600
+                         19        0.164680E-03                -168.609290041021
+                         20        0.744172E-04                -168.609290042743
+                         21        0.946952E-04                -168.609290043166
+                         22        0.949877E-04                -168.609290043181
+                         23        0.108131E-03                -168.609290042982
+                         24        0.997944E-04                -168.609290043110
+                         25        0.815837E-04                -168.609290043374
+                         26        0.392905E-04                -168.609290043927
+                         27        0.434470E-04                -168.609290043915
+                         28        0.429000E-04                -168.609290043917
+                         29        0.437098E-04                -168.609290043912
+                         30        0.437965E-04                -168.609290043911
+                         31        0.275170E-04                -168.609290044007
+                         32        0.172083E-04                -168.609290044056
+                         33        0.173204E-04                -168.609290044056
+                         34        0.173564E-04                -168.609290044055
+                         35        0.174212E-04                -168.609290044055
+                         36        0.134987E-04                -168.609290044064
+                         37        0.325820E-05                -168.609290044083
+                         38        0.206927E-05                -168.609290044084
+                         39        0.229090E-05                -168.609290044084
+                         40        0.239879E-05                -168.609290044084
+                         41        0.281274E-05                -168.609290044084
+                         42        0.148423E-05                -168.609290044085
+                         43        0.127768E-05                -168.609290044085
+                         44        0.869506E-06                -168.609290044085
+
+ Energy components [Hartree]           Total Energy ::         -168.609290044085
+                                        Band Energy ::          -26.567722665824
+                                     Kinetic Energy ::           97.300976348683
+                                   Potential Energy ::         -265.910266392768
+                                      Virial (-V/T) ::            2.732863290496
+                                        Core Energy ::         -299.564621628544
+                                          XC Energy ::          -16.222320813211
+                                     Coulomb Energy ::          147.177652397670
+                       Total Pseudopotential Energy ::         -396.951938294610
+                       Local Pseudopotential Energy ::         -362.642198390373
+                    Nonlocal Pseudopotential Energy ::          -34.309739904236
+                                        Confinement ::            0.863403173827
+
+ Orbital energies  State     Spin  L     Occupation   Energy[a.u.]    Energy[eV]
+
+                       1    alpha  0          1.000      -4.161685   -113.245221
+                       2    alpha  0          1.000      -0.179665     -4.888931
+                       1     beta  0          1.000      -4.152535   -112.996227
+                       2     beta  0          1.000      -0.178220     -4.849614
+
+                       1    alpha  1          3.000      -2.568055    -69.880323
+                       1     beta  1          3.000      -2.559152    -69.638070
+
+                       1    alpha  2          4.100      -0.317937     -8.651501
+                       1     beta  2          3.900      -0.310373     -8.445686
+
+
+ Total Electron Density at R=0:                                         0.030435
+
+ Spin 1
+ Re-scaling the density matrix to get the right number of electrons for spin 1
+                  # Electrons              Trace(P)               Scaling factor
+                        294.400             294.400                        1.000
+
+ Spin 2
+ Re-scaling the density matrix to get the right number of electrons for spin 2
+                  # Electrons              Trace(P)               Scaling factor
+                        281.600             281.600                        1.000
+
+
+ SCF WAVEFUNCTION OPTIMIZATION
+
+  Step     Update method      Time    Convergence         Total energy    Change
+  ------------------------------------------------------------------------------
+     1 NoMix/Diag. 0.80E-01    1.5     0.87371179     -5426.3925189222 -5.43E+03
+     2 Broy./Diag. 0.80E-01    1.5     0.01514335     -5315.1921870385  1.11E+02
+     3 Broy./Diag. 0.80E-01    1.5     0.04824857     -5350.8816037384 -3.57E+01
+     4 Broy./Diag. 0.80E-01    1.5     0.00602528     -5412.2324512359 -6.14E+01
+     5 Broy./Diag. 0.80E-01    1.5     0.01421889     -5415.5409762423 -3.31E+00
+     6 Broy./Diag. 0.80E-01    1.5     0.00838938     -5416.7566636651 -1.22E+00
+     7 Broy./Diag. 0.80E-01    1.5     0.00661527     -5416.7718221414 -1.52E-02
+     8 Broy./Diag. 0.80E-01    1.5     0.01149315     -5417.0035590479 -2.32E-01
+     9 Broy./Diag. 0.80E-01    1.5     0.00246187     -5417.1550836712 -1.52E-01
+    10 Broy./Diag. 0.80E-01    1.5     0.01175496     -5417.4521535837 -2.97E-01
+    11 Broy./Diag. 0.80E-01    1.5     0.00678174     -5416.9891040100  4.63E-01
+    12 Broy./Diag. 0.80E-01    1.5     0.00213978     -5417.1228381344 -1.34E-01
+    13 Broy./Diag. 0.80E-01    1.5     0.00839116     -5417.3877898459 -2.65E-01
+    14 Broy./Diag. 0.80E-01    1.5     0.00841578     -5417.2041703847  1.84E-01
+    15 Broy./Diag. 0.80E-01    1.5     0.00271343     -5416.8072892226  3.97E-01
+    16 Broy./Diag. 0.80E-01    1.5     0.00511877     -5416.4500411993  3.57E-01
+    17 Broy./Diag. 0.80E-01    1.5     0.01017527     -5416.4833319094 -3.33E-02
+    18 Broy./Diag. 0.80E-01    1.5     0.01164837     -5416.4205462805  6.28E-02
+    19 Broy./Diag. 0.80E-01    1.5     0.00822328     -5416.4233337804 -2.79E-03
+    20 Broy./Diag. 0.80E-01    1.5     0.00510758     -5416.4145386794  8.80E-03
+    21 Broy./Diag. 0.80E-01    1.5     0.00859067     -5417.0485649900 -6.34E-01
+    22 Broy./Diag. 0.80E-01    1.5     0.01204684     -5417.3399264763 -2.91E-01
+    23 Broy./Diag. 0.80E-01    1.5     0.00335601     -5417.6540534990 -3.14E-01
+    24 Broy./Diag. 0.80E-01    1.5     0.02643867     -5417.7959701075 -1.42E-01
+    25 Broy./Diag. 0.80E-01    1.5     0.01705507     -5417.9249432796 -1.29E-01
+    26 Broy./Diag. 0.80E-01    1.5     0.00513778     -5417.9701230578 -4.52E-02
+    27 Broy./Diag. 0.80E-01    1.5     0.00714776     -5417.9524553033  1.77E-02
+    28 Broy./Diag. 0.80E-01    1.5     0.01142266     -5417.8763790607  7.61E-02
+    29 Broy./Diag. 0.80E-01    1.5     0.00784261     -5417.4466216814  4.30E-01
+    30 Broy./Diag. 0.80E-01    1.5     0.03251960     -5417.3451321964  1.01E-01
+    31 Broy./Diag. 0.80E-01    1.5     0.03181490     -5418.0180197893 -6.73E-01
+    32 Broy./Diag. 0.80E-01    1.5     0.01342137     -5417.8839270389  1.34E-01
+    33 Broy./Diag. 0.80E-01    1.5     0.01399899     -5417.2036473267  6.80E-01
+    34 Broy./Diag. 0.80E-01    1.5     0.02864689     -5415.9223384473  1.28E+00
+    35 Broy./Diag. 0.80E-01    1.5     0.00783361     -5418.2653213578 -2.34E+00
+    36 Broy./Diag. 0.80E-01    1.5     0.00559425     -5417.6213307280  6.44E-01
+    37 Broy./Diag. 0.80E-01    1.5     0.00515575     -5418.3644566562 -7.43E-01
+    38 Broy./Diag. 0.80E-01    1.5     0.00268582     -5418.3515566248  1.29E-02
+    39 Broy./Diag. 0.80E-01    1.5     0.01410346     -5418.1996868618  1.52E-01
+    40 Broy./Diag. 0.80E-01    1.5     0.00882553     -5417.7556003188  4.44E-01
+    41 Broy./Diag. 0.80E-01    1.5     0.00760901     -5417.6102715954  1.45E-01
+    42 Broy./Diag. 0.80E-01    1.5     0.00448177     -5417.2461091310  3.64E-01
+    43 Broy./Diag. 0.80E-01    1.5     0.01309240     -5416.4554818385  7.91E-01
+    44 Broy./Diag. 0.80E-01    1.5     0.01458249     -5417.3075894576 -8.52E-01
+    45 Broy./Diag. 0.80E-01    1.5     0.04036014     -5416.4842826785  8.23E-01
+    46 Broy./Diag. 0.80E-01    1.5     0.02065141     -5417.2273676606 -7.43E-01
+    47 Broy./Diag. 0.80E-01    1.5     0.00484153     -5419.7299987197 -2.50E+00
+    48 Broy./Diag. 0.80E-01    1.5     0.01347696     -5419.5757106333  1.54E-01
+    49 Broy./Diag. 0.80E-01    1.5     0.00676085     -5420.2542277882 -6.79E-01
+    50 Broy./Diag. 0.80E-01    1.5     0.00483481     -5420.3311659277 -7.69E-02
+    51 Broy./Diag. 0.80E-01    1.5     0.00365448     -5420.4092184302 -7.81E-02
+    52 Broy./Diag. 0.80E-01    1.5     0.00464736     -5420.3358168960  7.34E-02
+    53 Broy./Diag. 0.80E-01    1.5     0.01536228     -5420.1030265852  2.33E-01
+    54 Broy./Diag. 0.80E-01    1.5     0.00480072     -5420.4663918222 -3.63E-01
+    55 Broy./Diag. 0.80E-01    1.5     0.00724204     -5420.3445370515  1.22E-01
+    56 Broy./Diag. 0.80E-01    1.5     0.02018861     -5419.3367262661  1.01E+00
+    57 Broy./Diag. 0.80E-01    1.5     0.01133284     -5420.0475431336 -7.11E-01
+    58 Broy./Diag. 0.80E-01    1.5     0.00524166     -5420.0386134682  8.93E-03
+    59 Broy./Diag. 0.80E-01    1.5     0.00601773     -5420.4198324357 -3.81E-01
+    60 Broy./Diag. 0.80E-01    1.5     0.00407393     -5420.5158735587 -9.60E-02
+    61 Broy./Diag. 0.80E-01    1.5     0.00827762     -5420.4997408273  1.61E-02
+    62 Broy./Diag. 0.80E-01    1.5     0.00607735     -5420.5731943496 -7.35E-02
+    63 Broy./Diag. 0.80E-01    1.5     0.01596899     -5420.2571911443  3.16E-01
+    64 Broy./Diag. 0.80E-01    1.5     0.01750100     -5417.2115017706  3.05E+00
+    65 Broy./Diag. 0.80E-01    1.5     0.00615273     -5417.0086791564  2.03E-01
+    66 Broy./Diag. 0.80E-01    1.5     0.01244811     -5418.9446972377 -1.94E+00
+    67 Broy./Diag. 0.80E-01    1.5     0.00464470     -5420.5096188083 -1.56E+00
+    68 Broy./Diag. 0.80E-01    1.5     0.00543066     -5419.9475819751  5.62E-01
+    69 Broy./Diag. 0.80E-01    1.5     0.01128222     -5419.0490442169  8.99E-01
+    70 Broy./Diag. 0.80E-01    1.5     0.00450439     -5419.5344617532 -4.85E-01
+    71 Broy./Diag. 0.80E-01    1.5     0.00541134     -5418.3978419672  1.14E+00
+    72 Broy./Diag. 0.80E-01    1.5     0.00790975     -5417.3873657850  1.01E+00
+    73 Broy./Diag. 0.80E-01    1.5     0.01065892     -5416.8165199069  5.71E-01
+    74 Broy./Diag. 0.80E-01    1.5     0.00656455     -5416.7269688645  8.96E-02
+    75 Broy./Diag. 0.80E-01    1.5     0.02479660     -5416.5570179835  1.70E-01
+    76 Broy./Diag. 0.80E-01    1.5     0.00944144     -5418.3544820502 -1.80E+00
+    77 Broy./Diag. 0.80E-01    1.5     0.00681499     -5417.5698912545  7.85E-01
+    78 Broy./Diag. 0.80E-01    1.5     0.00232961     -5416.9226927882  6.47E-01
+    79 Broy./Diag. 0.80E-01    1.5     0.02465893     -5416.6455982585  2.77E-01
+    80 Broy./Diag. 0.80E-01    1.5     0.01690063     -5418.2047188117 -1.56E+00
+    81 Broy./Diag. 0.80E-01    1.5     0.00545627     -5416.9331284854  1.27E+00
+    82 Broy./Diag. 0.80E-01    1.5     0.00832359     -5416.9654759645 -3.23E-02
+    83 Broy./Diag. 0.80E-01    1.5     0.00544240     -5416.9950643946 -2.96E-02
+    84 Broy./Diag. 0.80E-01    1.5     0.00769046     -5418.0305419224 -1.04E+00
+    85 Broy./Diag. 0.80E-01    1.5     0.00727989     -5417.9669949453  6.35E-02
+    86 Broy./Diag. 0.80E-01    1.5     0.00195023     -5417.8555661201  1.11E-01
+    87 Broy./Diag. 0.80E-01    1.5     0.00708642     -5417.9113863064 -5.58E-02
+    88 Broy./Diag. 0.80E-01    1.5     0.01681688     -5417.5109707703  4.00E-01
+    89 Broy./Diag. 0.80E-01    1.5     0.01533961     -5418.3091994104 -7.98E-01
+    90 Broy./Diag. 0.80E-01    1.5     0.01379321     -5417.3533917061  9.56E-01
+    91 Broy./Diag. 0.80E-01    1.5     0.01244956     -5418.3240032535 -9.71E-01
+    92 Broy./Diag. 0.80E-01    1.5     0.03949845     -5418.6631950951 -3.39E-01
+    93 Broy./Diag. 0.80E-01    1.5     0.01779954     -5415.5344355669  3.13E+00
+    94 Broy./Diag. 0.80E-01    1.5     0.02706815     -5416.9269181268 -1.39E+00
+    95 Broy./Diag. 0.80E-01    1.5     0.00905636     -5416.0406671134  8.86E-01
+    96 Broy./Diag. 0.80E-01    1.5     0.00751870     -5417.0482035215 -1.01E+00
+    97 Broy./Diag. 0.80E-01    1.5     0.01517516     -5418.1293663016 -1.08E+00
+    98 Broy./Diag. 0.80E-01    1.5     0.01429133     -5417.8288715875  3.00E-01
+    99 Broy./Diag. 0.80E-01    1.5     0.04147947     -5418.2354972607 -4.07E-01
+   100 Broy./Diag. 0.80E-01    1.5     0.04333631     -5415.8802159262  2.36E+00
+   101 Broy./Diag. 0.80E-01    1.5     0.00867403     -5414.1161989938  1.76E+00
+   102 Broy./Diag. 0.80E-01    1.5     0.02839374     -5414.9368242150 -8.21E-01
+   103 Broy./Diag. 0.80E-01    1.5     0.00840173     -5418.7048681008 -3.77E+00
+   104 Broy./Diag. 0.80E-01    1.5     0.02954867     -5418.9603892366 -2.56E-01
+   105 Broy./Diag. 0.80E-01    1.5     0.01575376     -5414.5534035931  4.41E+00
+   106 Broy./Diag. 0.80E-01    1.5     0.02060133     -5413.9369072754  6.16E-01
+   107 Broy./Diag. 0.80E-01    1.5     0.01655367     -5411.7157497509  2.22E+00
+   108 Broy./Diag. 0.80E-01    1.5     0.02195045     -5414.0621478117 -2.35E+00
+   109 Broy./Diag. 0.80E-01    1.5     0.03206766     -5413.9560967190  1.06E-01
+   110 Broy./Diag. 0.80E-01    1.5     0.01352730     -5414.6271346418 -6.71E-01
+   111 Broy./Diag. 0.80E-01    1.5     0.01969907     -5414.2877212792  3.39E-01
+   112 Broy./Diag. 0.80E-01    1.5     0.05634584     -5417.6210151338 -3.33E+00
+   113 Broy./Diag. 0.80E-01    1.5     0.01325353     -5417.7352239345 -1.14E-01
+   114 Broy./Diag. 0.80E-01    1.5     0.01148753     -5417.5829447261  1.52E-01
+   115 Broy./Diag. 0.80E-01    1.5     0.03270442     -5417.7878769538 -2.05E-01
+   116 Broy./Diag. 0.80E-01    1.5     0.01386386     -5418.0923718171 -3.04E-01
+   117 Broy./Diag. 0.80E-01    1.5     0.02086177     -5417.8575105239  2.35E-01
+   118 Broy./Diag. 0.80E-01    1.5     0.03395491     -5417.7244381774  1.33E-01
+   119 Broy./Diag. 0.80E-01    1.5     0.02835735     -5417.4368676073  2.88E-01
+   120 Broy./Diag. 0.80E-01    1.5     0.03661490     -5417.4802201004 -4.34E-02
+   121 Broy./Diag. 0.80E-01    1.5     0.03642547     -5417.9087388711 -4.29E-01
+   122 Broy./Diag. 0.80E-01    1.5     0.02316746     -5416.9929690483  9.16E-01
+   123 Broy./Diag. 0.80E-01    1.5     0.02160523     -5417.8132265328 -8.20E-01
+   124 Broy./Diag. 0.80E-01    1.5     0.02420104     -5417.7460976427  6.71E-02
+   125 Broy./Diag. 0.80E-01    1.5     0.06650274     -5417.5153929228  2.31E-01
+   126 Broy./Diag. 0.80E-01    1.5     0.03086148     -5418.2211533599 -7.06E-01
+   127 Broy./Diag. 0.80E-01    1.5     0.02773270     -5417.6219033929  5.99E-01
+   128 Broy./Diag. 0.80E-01    1.5     0.05482054     -5418.0876000541 -4.66E-01
+   129 Broy./Diag. 0.80E-01    1.5     0.01292593     -5416.3859105891  1.70E+00
+   130 Broy./Diag. 0.80E-01    1.5     0.02704994     -5416.8823782924 -4.96E-01
+   131 Broy./Diag. 0.80E-01    1.5     0.02134593     -5417.5926543830 -7.10E-01
+   132 Broy./Diag. 0.80E-01    1.5     0.01326942     -5417.0470305895  5.46E-01
+   133 Broy./Diag. 0.80E-01    1.5     0.05382798     -5417.0780201088 -3.10E-02
+   134 Broy./Diag. 0.80E-01    1.5     0.02175451     -5417.3805263831 -3.03E-01
+   135 Broy./Diag. 0.80E-01    1.5     0.00985266     -5417.4716968096 -9.12E-02
+   136 Broy./Diag. 0.80E-01    1.5     0.01827213     -5417.3465143401  1.25E-01
+   137 Broy./Diag. 0.80E-01    1.5     0.03681411     -5417.0814109632  2.65E-01
+   138 Broy./Diag. 0.80E-01    1.5     0.03197011     -5416.6374204968  4.44E-01
+   139 Broy./Diag. 0.80E-01    1.5     0.02644866     -5417.0420633337 -4.05E-01
+   140 Broy./Diag. 0.80E-01    1.5     0.02187107     -5416.7429604544  2.99E-01
+   141 Broy./Diag. 0.80E-01    1.5     0.06724266     -5416.2919531021  4.51E-01
+   142 Broy./Diag. 0.80E-01    1.5     0.08383182     -5417.3981242378 -1.11E+00
+   143 Broy./Diag. 0.80E-01    1.5     0.03586687     -5412.8636920290  4.53E+00
+   144 Broy./Diag. 0.80E-01    1.5     0.00360834     -5415.2723418958 -2.41E+00
+   145 Broy./Diag. 0.80E-01    1.5     0.00966480     -5414.7492348207  5.23E-01
+   146 Broy./Diag. 0.80E-01    1.5     0.00440546     -5414.5486662472  2.01E-01
+   147 Broy./Diag. 0.80E-01    1.5     0.00458426     -5414.0405123816  5.08E-01
+   148 Broy./Diag. 0.80E-01    1.5     0.10314108     -5413.5482192466  4.92E-01
+   149 Broy./Diag. 0.80E-01    1.5     0.01050698     -5416.0225229473 -2.47E+00
+   150 Broy./Diag. 0.80E-01    1.5     0.01876048     -5415.8378133609  1.85E-01
+   151 Broy./Diag. 0.80E-01    1.5     0.02387708     -5415.8455301171 -7.72E-03
+   152 Broy./Diag. 0.80E-01    1.5     0.03397402     -5414.5773036650  1.27E+00
+   153 Broy./Diag. 0.80E-01    1.5     0.01118388     -5414.9104993287 -3.33E-01
+   154 Broy./Diag. 0.80E-01    1.5     0.01337893     -5415.0877081398 -1.77E-01
+   155 Broy./Diag. 0.80E-01    1.5     0.01066950     -5414.4879628477  6.00E-01
+   156 Broy./Diag. 0.80E-01    1.5     0.02072561     -5411.8434381767  2.64E+00
+   157 Broy./Diag. 0.80E-01    1.5     0.00788498     -5415.3814555867 -3.54E+00
+   158 Broy./Diag. 0.80E-01    1.5     0.05394855     -5414.8863113917  4.95E-01
+   159 Broy./Diag. 0.80E-01    1.5     0.05130476     -5414.9369609016 -5.06E-02
+   160 Broy./Diag. 0.80E-01    1.5     0.02584668     -5414.4213837586  5.16E-01
+   161 Broy./Diag. 0.80E-01    1.5     0.06721978     -5414.7026848414 -2.81E-01
+   162 Broy./Diag. 0.80E-01    1.5     0.03832685     -5413.6021167487  1.10E+00
+   163 Broy./Diag. 0.80E-01    1.5     0.01691774     -5414.0626825529 -4.61E-01
+   164 Broy./Diag. 0.80E-01    1.5     0.00277107     -5416.9150154452 -2.85E+00
+   165 Broy./Diag. 0.80E-01    1.5     0.05069061     -5416.8438553098  7.12E-02
+   166 Broy./Diag. 0.80E-01    1.5     0.07513788     -5416.7969039147  4.70E-02
+   167 Broy./Diag. 0.80E-01    1.5     0.01550736     -5417.4991619874 -7.02E-01
+   168 Broy./Diag. 0.80E-01    1.5     0.03804133     -5418.3091630737 -8.10E-01
+   169 Broy./Diag. 0.80E-01    1.5     0.02659263     -5419.7321979137 -1.42E+00
+   170 Broy./Diag. 0.80E-01    1.5     0.03400607     -5417.8061756373  1.93E+00
+   171 Broy./Diag. 0.80E-01    1.5     0.02408374     -5418.5327579625 -7.27E-01
+   172 Broy./Diag. 0.80E-01    1.5     0.01960031     -5418.4087601645  1.24E-01
+   173 Broy./Diag. 0.80E-01    1.5     0.02471048     -5418.1375794706  2.71E-01
+   174 Broy./Diag. 0.80E-01    1.5     0.01728178     -5418.3203187941 -1.83E-01
+   175 Broy./Diag. 0.80E-01    1.5     0.02315547     -5418.5466254313 -2.26E-01
+   176 Broy./Diag. 0.80E-01    1.5     0.05626404     -5419.1481157982 -6.01E-01
+   177 Broy./Diag. 0.80E-01    1.5     0.06050950     -5417.9317273534  1.22E+00
+   178 Broy./Diag. 0.80E-01    1.5     0.04388719     -5417.2394191937  6.92E-01
+   179 Broy./Diag. 0.80E-01    1.5     0.04449308     -5417.5757793655 -3.36E-01
+   180 Broy./Diag. 0.80E-01    1.5     0.03543272     -5416.6432350555  9.33E-01
+   181 Broy./Diag. 0.80E-01    1.5     0.12061653     -5416.5736342716  6.96E-02
+   182 Broy./Diag. 0.80E-01    1.5     0.09148227     -5415.6520471415  9.22E-01
+   183 Broy./Diag. 0.80E-01    1.5     0.01711791     -5417.3878243967 -1.74E+00
+   184 Broy./Diag. 0.80E-01    1.5     0.04487304     -5417.4640081420 -7.62E-02
+   185 Broy./Diag. 0.80E-01    1.5     0.05522106     -5417.5875391011 -1.24E-01
+   186 Broy./Diag. 0.80E-01    1.5     0.11465350     -5416.8400781047  7.47E-01
+   187 Broy./Diag. 0.80E-01    1.5     0.05452796     -5415.7092185409  1.13E+00
+   188 Broy./Diag. 0.80E-01    1.5     0.06888497     -5415.3113582631  3.98E-01
+   189 Broy./Diag. 0.80E-01    1.5     0.02586201     -5417.4808030184 -2.17E+00
+   190 Broy./Diag. 0.80E-01    1.5     0.05382711     -5417.4582042280  2.26E-02
+   191 Broy./Diag. 0.80E-01    1.5     0.01610834     -5416.1017233453  1.36E+00
+   192 Broy./Diag. 0.80E-01    1.5     0.07183662     -5416.1498531417 -4.81E-02
+   193 Broy./Diag. 0.80E-01    1.5     0.10492290     -5412.1846895166  3.97E+00
+   194 Broy./Diag. 0.80E-01    1.5     0.07192165     -5415.3311488758 -3.15E+00
+   195 Broy./Diag. 0.80E-01    1.5     0.03051456     -5417.3792962811 -2.05E+00
+   196 Broy./Diag. 0.80E-01    1.5     0.02167678     -5417.0119786339  3.67E-01
+   197 Broy./Diag. 0.80E-01    1.5     0.02194148     -5416.9869085861  2.51E-02
+   198 Broy./Diag. 0.80E-01    1.5     0.03755486     -5416.8960468987  9.09E-02
+   199 Broy./Diag. 0.80E-01    1.5     0.03382362     -5417.1042244922 -2.08E-01
+   200 Broy./Diag. 0.80E-01    1.5     0.03354294     -5416.4513780235  6.53E-01
+   201 Broy./Diag. 0.80E-01    1.5     0.03606381     -5416.0104876959  4.41E-01
+   202 Broy./Diag. 0.80E-01    1.5     0.01724777     -5415.3238422672  6.87E-01
+   203 Broy./Diag. 0.80E-01    1.5     0.01397110     -5413.7068968646  1.62E+00
+   204 Broy./Diag. 0.80E-01    1.5     0.01035304     -5413.4893687444  2.18E-01
+   205 Broy./Diag. 0.80E-01    1.5     0.00546347     -5413.8284729576 -3.39E-01
+   206 Broy./Diag. 0.80E-01    1.5     0.01894795     -5413.6733294323  1.55E-01
+   207 Broy./Diag. 0.80E-01    1.5     0.04814558     -5414.7568796031 -1.08E+00
+   208 Broy./Diag. 0.80E-01    1.5     0.01245112     -5415.0192350800 -2.62E-01
+   209 Broy./Diag. 0.80E-01    1.5     0.06401438     -5415.4026672640 -3.83E-01
+   210 Broy./Diag. 0.80E-01    1.5     0.04197660     -5415.7993098148 -3.97E-01
+   211 Broy./Diag. 0.80E-01    1.5     0.04911654     -5413.7914496388  2.01E+00
+   212 Broy./Diag. 0.80E-01    1.5     0.02638791     -5415.5211853218 -1.73E+00
+   213 Broy./Diag. 0.80E-01    1.5     0.00686535     -5415.4816324029  3.96E-02
+   214 Broy./Diag. 0.80E-01    1.5     0.00630120     -5415.6074590762 -1.26E-01
+   215 Broy./Diag. 0.80E-01    1.5     0.01151069     -5415.7258724912 -1.18E-01
+   216 Broy./Diag. 0.80E-01    1.5     0.00814069     -5415.9254482734 -2.00E-01
+   217 Broy./Diag. 0.80E-01    1.5     0.00680421     -5415.0479553140  8.77E-01
+   218 Broy./Diag. 0.80E-01    1.5     0.04997669     -5415.5502532437 -5.02E-01
+   219 Broy./Diag. 0.80E-01    1.5     0.01549424     -5416.1516105467 -6.01E-01
+   220 Broy./Diag. 0.80E-01    1.5     0.00603040     -5416.8653383530 -7.14E-01
+   221 Broy./Diag. 0.80E-01    1.5     0.01744573     -5416.9270145970 -6.17E-02
+   222 Broy./Diag. 0.80E-01    1.5     0.02580946     -5416.0328929131  8.94E-01
+   223 Broy./Diag. 0.80E-01    1.5     0.02307956     -5414.4305958452  1.60E+00
+   224 Broy./Diag. 0.80E-01    1.5     0.01300413     -5414.1828064878  2.48E-01
+   225 Broy./Diag. 0.80E-01    1.5     0.03251417     -5415.3307764487 -1.15E+00
+   226 Broy./Diag. 0.80E-01    1.5     0.03225071     -5413.6129034282  1.72E+00
+   227 Broy./Diag. 0.80E-01    1.5     0.01411508     -5412.7121952309  9.01E-01
+   228 Broy./Diag. 0.80E-01    1.5     0.02089176     -5413.2466634363 -5.34E-01
+   229 Broy./Diag. 0.80E-01    1.5     0.03565596     -5413.7096639937 -4.63E-01
+   230 Broy./Diag. 0.80E-01    1.5     0.01366814     -5413.0686450593  6.41E-01
+   231 Broy./Diag. 0.80E-01    1.5     0.00762136     -5413.9977510946 -9.29E-01
+   232 Broy./Diag. 0.80E-01    1.5     0.02488444     -5413.9296898327  6.81E-02
+   233 Broy./Diag. 0.80E-01    1.5     0.02160031     -5414.7629467889 -8.33E-01
+   234 Broy./Diag. 0.80E-01    1.5     0.02646598     -5414.1861235786  5.77E-01
+   235 Broy./Diag. 0.80E-01    1.5     0.01581449     -5415.9939313050 -1.81E+00
+   236 Broy./Diag. 0.80E-01    1.5     0.10053859     -5416.2714864819 -2.78E-01
+   237 Broy./Diag. 0.80E-01    1.5     0.03833185     -5417.9205203398 -1.65E+00
+   238 Broy./Diag. 0.80E-01    1.5     0.04516618     -5416.2531013637  1.67E+00
+   239 Broy./Diag. 0.80E-01    1.5     0.00369118     -5416.0025460025  2.51E-01
+   240 Broy./Diag. 0.80E-01    1.5     0.02903690     -5415.8008882391  2.02E-01
+   241 Broy./Diag. 0.80E-01    1.5     0.03623870     -5415.1253353594  6.76E-01
+   242 Broy./Diag. 0.80E-01    1.5     0.05793243     -5417.4131324733 -2.29E+00
+   243 Broy./Diag. 0.80E-01    1.5     0.04673473     -5415.9485525889  1.46E+00
+   244 Broy./Diag. 0.80E-01    1.5     0.03938221     -5415.0454165459  9.03E-01
+   245 Broy./Diag. 0.80E-01    1.5     0.01682561     -5415.5233855574 -4.78E-01
+   246 Broy./Diag. 0.80E-01    1.5     0.13404443     -5415.4796365172  4.37E-02
+   247 Broy./Diag. 0.80E-01    1.5     0.03690843     -5420.0752921312 -4.60E+00
+   248 Broy./Diag. 0.80E-01    1.5     0.00395896     -5418.2691810547  1.81E+00
+   249 Broy./Diag. 0.80E-01    1.5     0.04060607     -5418.1933902166  7.58E-02
+   250 Broy./Diag. 0.80E-01    1.5     0.05032091     -5416.0041697538  2.19E+00
+   251 Broy./Diag. 0.80E-01    1.5     0.03479659     -5414.4316383560  1.57E+00
+   252 Broy./Diag. 0.80E-01    1.5     0.00636007     -5415.9937392863 -1.56E+00
+   253 Broy./Diag. 0.80E-01    1.5     0.03208221     -5416.3749830698 -3.81E-01
+   254 Broy./Diag. 0.80E-01    1.5     0.04760551     -5417.0167581053 -6.42E-01
+   255 Broy./Diag. 0.80E-01    1.5     0.05887513     -5416.5896004838  4.27E-01
+   256 Broy./Diag. 0.80E-01    1.5     0.11488019     -5416.5088995447  8.07E-02
+   257 Broy./Diag. 0.80E-01    1.5     0.00528311     -5420.1912146314 -3.68E+00
+   258 Broy./Diag. 0.80E-01    1.5     0.02192233     -5419.4897546841  7.01E-01
+   259 Broy./Diag. 0.80E-01    1.5     0.05135643     -5418.7729968596  7.17E-01
+   260 Broy./Diag. 0.80E-01    1.5     0.03090206     -5415.1577854263  3.62E+00
+   261 Broy./Diag. 0.80E-01    1.5     0.00866756     -5416.9124357230 -1.75E+00
+   262 Broy./Diag. 0.80E-01    1.5     0.03177687     -5417.5686147666 -6.56E-01
+   263 Broy./Diag. 0.80E-01    1.5     0.00532240     -5416.6262955239  9.42E-01
+   264 Broy./Diag. 0.80E-01    1.5     0.01160892     -5416.0332850129  5.93E-01
+   265 Broy./Diag. 0.80E-01    1.5     0.00855897     -5415.8396832558  1.94E-01
+   266 Broy./Diag. 0.80E-01    1.5     0.08659473     -5416.5072193543 -6.68E-01
+   267 Broy./Diag. 0.80E-01    1.5     0.01956068     -5414.0715956706  2.44E+00
+   268 Broy./Diag. 0.80E-01    1.5     0.01174961     -5413.6664165194  4.05E-01
+   269 Broy./Diag. 0.80E-01    1.5     0.04460894     -5414.3936942258 -7.27E-01
+   270 Broy./Diag. 0.80E-01    1.5     0.02869086     -5417.3665087577 -2.97E+00
+   271 Broy./Diag. 0.80E-01    1.5     0.01945747     -5418.2079605520 -8.41E-01
+   272 Broy./Diag. 0.80E-01    1.5     0.01400664     -5418.9645333275 -7.57E-01
+   273 Broy./Diag. 0.80E-01    1.5     0.01517332     -5419.0566522738 -9.21E-02
+   274 Broy./Diag. 0.80E-01    1.5     0.03557514     -5419.3544174660 -2.98E-01
+   275 Broy./Diag. 0.80E-01    1.5     0.05004673     -5419.3904125614 -3.60E-02
+   276 Broy./Diag. 0.80E-01    1.5     0.03481870     -5417.6350720628  1.76E+00
+   277 Broy./Diag. 0.80E-01    1.5     0.01347208     -5418.7755232627 -1.14E+00
+   278 Broy./Diag. 0.80E-01    1.5     0.03445871     -5418.9482965403 -1.73E-01
+   279 Broy./Diag. 0.80E-01    1.5     0.00998169     -5418.4747760803  4.74E-01
+   280 Broy./Diag. 0.80E-01    1.5     0.02516803     -5418.4820019879 -7.23E-03
+   281 Broy./Diag. 0.80E-01    1.5     0.04137109     -5416.8853125055  1.60E+00
+   282 Broy./Diag. 0.80E-01    1.5     0.00923508     -5419.3166201844 -2.43E+00
+   283 Broy./Diag. 0.80E-01    1.5     0.02854901     -5419.4681136197 -1.51E-01
+   284 Broy./Diag. 0.80E-01    1.5     0.03504165     -5418.8306916982  6.37E-01
+   285 Broy./Diag. 0.80E-01    1.5     0.05077958     -5417.5590474050  1.27E+00
+   286 Broy./Diag. 0.80E-01    1.5     0.00921132     -5418.2672398345 -7.08E-01
+   287 Broy./Diag. 0.80E-01    1.5     0.02142521     -5418.0262236141  2.41E-01
+   288 Broy./Diag. 0.80E-01    1.5     0.01367734     -5417.0191931269  1.01E+00
+   289 Broy./Diag. 0.80E-01    1.5     0.01429972     -5417.6864181891 -6.67E-01
+   290 Broy./Diag. 0.80E-01    1.5     0.03072733     -5417.2629911596  4.23E-01
+   291 Broy./Diag. 0.80E-01    1.5     0.01207629     -5417.8226378372 -5.60E-01
+   292 Broy./Diag. 0.80E-01    1.5     0.07430838     -5418.2912147665 -4.69E-01
+   293 Broy./Diag. 0.80E-01    1.5     0.03333032     -5417.0132693308  1.28E+00
+   294 Broy./Diag. 0.80E-01    1.5     0.01849286     -5416.4195070760  5.94E-01
+   295 Broy./Diag. 0.80E-01    1.5     0.03123293     -5417.8781603069 -1.46E+00
+   296 Broy./Diag. 0.80E-01    1.5     0.02907842     -5418.5863459987 -7.08E-01
+   297 Broy./Diag. 0.80E-01    1.5     0.03701403     -5417.6076870775  9.79E-01
+   298 Broy./Diag. 0.80E-01    1.5     0.02788066     -5417.7579716733 -1.50E-01
+   299 Broy./Diag. 0.80E-01    1.5     0.02134494     -5417.0022622269  7.56E-01
+   300 Broy./Diag. 0.80E-01    1.5     0.04022761     -5412.2587648196  4.74E+00
+   301 Broy./Diag. 0.80E-01    1.5     0.01730039     -5418.7413770367 -6.48E+00
+   302 Broy./Diag. 0.80E-01    1.5     0.03035799     -5417.2383477066  1.50E+00
+   303 Broy./Diag. 0.80E-01    1.5     0.00904275     -5417.5888998553 -3.51E-01
+   304 Broy./Diag. 0.80E-01    1.5     0.05334750     -5418.5748638168 -9.86E-01
+   305 Broy./Diag. 0.80E-01    1.5     0.05015670     -5416.7045869815  1.87E+00
+   306 Broy./Diag. 0.80E-01    1.5     0.01462709     -5416.3384247435  3.66E-01
+   307 Broy./Diag. 0.80E-01    1.5     0.02238147     -5416.6331837445 -2.95E-01
+   308 Broy./Diag. 0.80E-01    1.5     0.03183744     -5415.0661797220  1.57E+00
+   309 Broy./Diag. 0.80E-01    1.5     0.02913748     -5416.5366513803 -1.47E+00
+   310 Broy./Diag. 0.80E-01    1.5     0.01946093     -5415.7309379377  8.06E-01
+   311 Broy./Diag. 0.80E-01    1.5     0.00207382     -5416.5392401524 -8.08E-01
+   312 Broy./Diag. 0.80E-01    1.5     0.06538456     -5416.3198597218  2.19E-01
+   313 Broy./Diag. 0.80E-01    1.5     0.00949951     -5418.4383941411 -2.12E+00
+   314 Broy./Diag. 0.80E-01    1.5     0.03487991     -5418.4815788979 -4.32E-02
+   315 Broy./Diag. 0.80E-01    1.5     0.02000624     -5418.5514140978 -6.98E-02
+   316 Broy./Diag. 0.80E-01    1.5     0.04320497     -5419.6279426300 -1.08E+00
+   317 Broy./Diag. 0.80E-01    1.5     0.00695168     -5418.7044393590  9.24E-01
+   318 Broy./Diag. 0.80E-01    1.5     0.02808736     -5418.5894719452  1.15E-01
+   319 Broy./Diag. 0.80E-01    1.5     0.05960357     -5418.1518669762  4.38E-01
+   320 Broy./Diag. 0.80E-01    1.5     0.04793130     -5416.9492230882  1.20E+00
+   321 Broy./Diag. 0.80E-01    1.5     0.02630832     -5416.6467310854  3.02E-01
+   322 Broy./Diag. 0.80E-01    1.5     0.00926323     -5416.9551893074 -3.08E-01
+   323 Broy./Diag. 0.80E-01    1.5     0.02489162     -5418.2516698665 -1.30E+00
+   324 Broy./Diag. 0.80E-01    1.5     0.02023956     -5417.4246473540  8.27E-01
+   325 Broy./Diag. 0.80E-01    1.5     0.01177095     -5418.2819268890 -8.57E-01
+   326 Broy./Diag. 0.80E-01    1.5     0.01047879     -5417.3606879068  9.21E-01
+   327 Broy./Diag. 0.80E-01    1.5     0.03711000     -5418.4927209294 -1.13E+00
+   328 Broy./Diag. 0.80E-01    1.5     0.02412005     -5414.7169695377  3.78E+00
+   329 Broy./Diag. 0.80E-01    1.5     0.03433680     -5413.7633726193  9.54E-01
+   330 Broy./Diag. 0.80E-01    1.5     0.03210143     -5419.0056745362 -5.24E+00
+   331 Broy./Diag. 0.80E-01    1.5     0.01843085     -5419.1163044960 -1.11E-01
+   332 Broy./Diag. 0.80E-01    1.5     0.04645355     -5419.0131560242  1.03E-01
+   333 Broy./Diag. 0.80E-01    1.5     0.03310460     -5419.1245138162 -1.11E-01
+   334 Broy./Diag. 0.80E-01    1.5     0.02537335     -5419.9960563791 -8.72E-01
+   335 Broy./Diag. 0.80E-01    1.5     0.00251257     -5419.3950686520  6.01E-01
+   336 Broy./Diag. 0.80E-01    1.5     0.04632731     -5419.0410489377  3.54E-01
+   337 Broy./Diag. 0.80E-01    1.5     0.04199105     -5417.2214970781  1.82E+00
+   338 Broy./Diag. 0.80E-01    1.5     0.01399911     -5416.4768480828  7.45E-01
+   339 Broy./Diag. 0.80E-01    1.5     0.07589530     -5414.2736752707  2.20E+00
+   340 Broy./Diag. 0.80E-01    1.5     0.01074835     -5417.8730781460 -3.60E+00
+   341 Broy./Diag. 0.80E-01    1.5     0.06617590     -5417.8214805500  5.16E-02
+   342 Broy./Diag. 0.80E-01    1.5     0.02116240     -5418.6674104363 -8.46E-01
+   343 Broy./Diag. 0.80E-01    1.5     0.01797895     -5418.2615408789  4.06E-01
+   344 Broy./Diag. 0.80E-01    1.5     0.00872858     -5418.5847640221 -3.23E-01
+   345 Broy./Diag. 0.80E-01    1.5     0.14311808     -5418.7717672845 -1.87E-01
+   346 Broy./Diag. 0.80E-01    1.5     0.19099055     -5415.3769554337  3.39E+00
+   347 Broy./Diag. 0.80E-01    1.5     0.05525575     -5417.9912321039 -2.61E+00
+   348 Broy./Diag. 0.80E-01    1.5     0.02204356     -5417.6134728934  3.78E-01
+   349 Broy./Diag. 0.80E-01    1.5     0.01764652     -5414.2588902535  3.35E+00
+   350 Broy./Diag. 0.80E-01    1.5     0.01499774     -5416.7466395270 -2.49E+00
+   351 Broy./Diag. 0.80E-01    1.5     0.00594120     -5416.8960823523 -1.49E-01
+   352 Broy./Diag. 0.80E-01    1.5     0.01345833     -5416.9517118271 -5.56E-02
+   353 Broy./Diag. 0.80E-01    1.5     0.01054105     -5417.2199532463 -2.68E-01
+   354 Broy./Diag. 0.80E-01    1.5     0.00956038     -5417.5697966013 -3.50E-01
+   355 Broy./Diag. 0.80E-01    1.5     0.04454674     -5415.9626977833  1.61E+00
+   356 Broy./Diag. 0.80E-01    1.5     0.11338823     -5413.7963441369  2.17E+00
+   357 Broy./Diag. 0.80E-01    1.5     0.09951902     -5417.1291621797 -3.33E+00
+   358 Broy./Diag. 0.80E-01    1.5     0.01991165     -5415.0644751744  2.06E+00
+   359 Broy./Diag. 0.80E-01    1.5     0.02363856     -5414.7424234599  3.22E-01
+   360 Broy./Diag. 0.80E-01    1.5     0.03582693     -5415.6240571554 -8.82E-01
+   361 Broy./Diag. 0.80E-01    1.5     0.00489120     -5414.3269521878  1.30E+00
+   362 Broy./Diag. 0.80E-01    1.5     0.01307278     -5414.7898593077 -4.63E-01
+   363 Broy./Diag. 0.80E-01    1.5     0.02406380     -5414.9878284688 -1.98E-01
+   364 Broy./Diag. 0.80E-01    1.5     0.03249294     -5413.9429153546  1.04E+00
